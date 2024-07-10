@@ -13,8 +13,8 @@ The purpose is to make the deployment easier and more suitable for different env
 
 ### Paths
 
-An example `channels.xml` is included by default in the image.
-However if you want to configure your own channels you need to provide your own configuration file.
+An example `channels.xml` is included by default in the image.<br>
+However if you want to configure your own channels you need to provide your own configuration file.<br>
 You can do this by creating a mapping in the `/config` folder.
 
 ### Environment Variables
