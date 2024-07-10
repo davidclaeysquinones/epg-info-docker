@@ -21,7 +21,7 @@ You can do this by creating a mapping in the `/config` folder.
 
 | Variable                      | Description                                                                | Default          |
 |-------------------------------|----------------------------------------------------------------------------|------------------|
-| CRON_SCHEDULE                 | CRON expression describing the recurrence for epg retrieval.               | 0 0,12 * * *     |            
+| CRON_SCHEDULE                 | CRON expression describing the recurrence for epg retrieval.               | `0 0,12 * * *`   |            
 | DAYS                          | Describes the desired amount of days in the future for for epg retrieval.  | 14               |
 | MAX_CONNECTIONS               | The maximum amount of parallel connections that can be established         | 10               |
 
