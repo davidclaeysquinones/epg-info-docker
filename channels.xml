@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+    <!--This is a sample of a channel you can add look at https://github.com/iptv-org/epg/tree/master/sites for the complete list-->
+	<channel site="movistarplus.es" lang="es" xmltv_id="24Horas.es" site_id="24H">24 Horas</channel>
+</channels>
