@@ -26,6 +26,11 @@ jobs:
           registry: git.claeyscloud.com
           username: nologin
           password: ${{ secrets.PACKAGE_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+            type=semver,pattern={{version}}
       - name: Build and push
         uses: https://github.com/docker/build-push-action@v5
         with:
@@ -33,3 +38,5 @@ jobs:
           push: true
           tags: |
              git.claeyscloud.com/david/epg-info
+          labels: ${{ steps.meta.outputs.labels }}
+             

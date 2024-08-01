@@ -29,6 +29,10 @@ RUN apk update \
     && rm LICENSE \
     && rm README.md \
     && rm SITES.md \
+    && rm -rf tests \
+    && rm sites/**/readme.md \
+    && rm -rf sites/**/__data__ \
+    && rm sites/**/**.test.js \
     && ln -s /config/channels.xml $(echo "${WORKDIR}/channels.xml") \
     && mkdir /public
 COPY start.sh $WORKDIR
