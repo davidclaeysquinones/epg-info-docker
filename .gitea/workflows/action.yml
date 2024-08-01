@@ -31,7 +31,12 @@ jobs:
         uses: docker/metadata-action@v5
         with:
             inages: git.claeyscloud.com/david/epg-info
-            tags: type=semver,pattern={{version}}
+            tags: |
+               type=ref,event=branch
+               type=ref,event=pr
+               type=semver,pattern={{version}}
+               type=semver,pattern={{major}}.{{minor}}
+               type=sha
       - name: Build and push
         uses: https://github.com/docker/build-push-action@v5
         with:
