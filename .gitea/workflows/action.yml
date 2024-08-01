@@ -30,7 +30,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-            inages: git.claeyscloud.com/david/epg-info
+            images: git.claeyscloud.com/david/epg-info
             tags: |
                type=ref,event=branch
                type=ref,event=pr
