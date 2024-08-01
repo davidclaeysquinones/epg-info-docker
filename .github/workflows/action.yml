@@ -21,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: git.claeyscloud.com/david/epg-info
+          images: ghcr.io/davidclaeysquinones/epg-info
           tags: |
              type=semver,pattern={{raw}}
              type=sha
