@@ -30,7 +30,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-            type=semver,pattern={{version}}
+            labels: type=semver,pattern={{version}}
       - name: Build and push
         uses: https://github.com/docker/build-push-action@v5
         with:
