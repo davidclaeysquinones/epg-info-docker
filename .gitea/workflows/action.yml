@@ -32,7 +32,7 @@ jobs:
         with:
             images: git.claeyscloud.com/david/epg-info
             tags: |
-              type=ref,event=tag
+               type=raw
                type=sha
       - name: Build and push
         uses: https://github.com/docker/build-push-action@v5
