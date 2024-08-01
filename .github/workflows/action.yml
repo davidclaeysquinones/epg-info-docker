@@ -17,10 +17,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: git.claeyscloud.com/david/epg-info
+          tags: |
+             type=semver,pattern={{raw}}
+             type=sha
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/davidclaeysquinones/epg-info:latest
+          tags: ${{ steps.meta.outputs.tags }}            
+          labels: ${{ steps.meta.outputs.labels }}
