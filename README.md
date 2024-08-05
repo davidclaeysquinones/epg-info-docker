@@ -3,7 +3,7 @@
 This repo builds and Docker image of [iptv-org/epg](https://github.com/iptv-org/epg).
 The purpose is to make the deployment easier and more suitable for different environments.
 
-The original repository of this image is hosted on https://git.claeyscloud.com/david/epg-info-docker.
+The original repository of this image is hosted on https://git.claeyscloud.com/david/epg-info-docker.<br>
 A public mirror is available at https://github.com/davidclaeysquinones/epg-info-docker.
 
 ## Dependencies
