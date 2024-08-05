@@ -47,8 +47,8 @@ services:
     volumes:
       # add a mapping in order to add the channels file
       - /docker/epg:/config
-	ports:
-      - 6060:3000
+    ports:
+      - 6080:3000
     environment:
       # specify the time zone for the server
       - TZ=Etc/UTC
