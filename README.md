@@ -54,3 +54,10 @@ services:
       - TZ=Etc/UTC
     restart: unless-stopped
 ```
+
+### Versions
+
+- 1.0.0
+  [08-01-2024](https://github.com/iptv-org/epg/commit/793c74ca397504fc2afc8fbfa998e0b8e4ca45d9)
+- 1.0.1
+  [08-14-2024](https://github.com/iptv-org/epg/commit/270e85cfae6f0f691c2e6ab7ce511d60fd687565)
