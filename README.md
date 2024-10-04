@@ -35,7 +35,7 @@ You can do this by creating a mapping in the `/config` folder.
 | CRON_SCHEDULE                 | CRON expression describing the recurrence for epg retrieval.               | `0 0,12 * * *`   |            
 | DAYS                          | Describes the desired amount of days in the future for for epg retrieval.  | 14               |
 | MAX_CONNECTIONS               | The maximum amount of parallel connections that can be established         | 10               |
-| ENABLE_FIXES                  | Some fixes to providers take a long time to be merged into the main branch.<br>When this option is enabled some of these fixes will also be included.<br>The source code for these fixes can be seen under the `fixes` folder.<br> Recreate the container when changing this variable in order to take effect  | FALSE            |
+| ENABLE_FIXES                  | Some fixes to providers take a long time to be merged into the main branch.<br>When this option is enabled some of these fixes will also be included.<br>The source code for these fixes can be seen under the `fixes` folder.<br> Recreate the container when changing this variable in order for it to take effect  | false            |
 
 ### Compose file
 
