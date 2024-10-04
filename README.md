@@ -34,7 +34,8 @@ You can do this by creating a mapping in the `/config` folder.
 Through the `ENABLE_FIXES` variable custom provider fixes can be applied to the container.
 By default some fixes are available. If you have suggestions or a problem with them please submit an issue.
 If for some reason you want to include your own provider fixes this is possible by creation a mapping in the `/fixes` folder.<br>
-The expected structure is */fixes/`provider_name`/provider_name.config.js*.
+The expected structure is */fixes/`provider_name`/`provider_name`.config.js*.<br>
+It is recommended that existing provider code as a base for your customisations.
 
 ### Environment Variables
 
