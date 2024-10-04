@@ -17,6 +17,7 @@ The `pm2` and `serve` packages are used in order to run the application in the c
 
 ### Paths
 
+#### Channels file
 An example `channels.xml` is included by default in the image.<br>
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -27,6 +28,13 @@ An example `channels.xml` is included by default in the image.<br>
 ```
 However if you want to configure your own channels you need to provide your own configuration file.<br>
 You can do this by creating a mapping in the `/config` folder.
+
+#### Custom fixes
+
+Through the `ENABLE_FIXES` variable custom provider fixes can be applied to the container.
+By default some fixes are available. If you have suggestions or a problem with them please submit an issue.
+If for some reason you want to include your own provider fixes this is possible by creation a mapping in the `/fixes` folder.
+The expected structure is */fixes/`provider_name`/provider_name.config.js*.
 
 ### Environment Variables
 
@@ -70,3 +78,5 @@ services:
   [09-30-2024](https://github.com/iptv-org/epg/commit/d90c7a54b941238cb92391b33d80a75e746d3002)
 - 1.0.5
   [10-02-2024](https://github.com/iptv-org/epg/commit/713dbf60a1cb9623ffcab6ab370ee9a78b32102b)
+- 1.0.6
+  [10-02-2024](https://github.com/iptv-org/epg/commit/713dbf60a1cb9623ffcab6ab370ee9a78b32102b)<br>Adds possibility to enable custom fixes
