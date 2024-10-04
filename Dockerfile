@@ -4,12 +4,16 @@ ARG GIT_BRANCH=master
 ENV CRON_SCHEDULE="0 0,12 * * *"
 ENV DAYS=14
 ENV MAX_CONNECTIONS=10
+ENV ENABLE_FIXES=false
 ARG BIN_FOLDER=/bin
 ARG EPG_FOLDER=epg
+ARG FIXES_FOLDER_ARG=fixes
 ARG START_SCRIPT_ARG=$BIN_FOLDER/$EPG_FOLDER/start.sh
 ENV WORKDIR=${BIN_FOLDER}/${EPG_FOLDER}
+ENV FIXES_FOLDER=$FIXES_FOLDER_ARG
 ENV START_SCRIPT=$START_SCRIPT_ARG
 COPY channels.xml /config/channels.xml
+ADD $FIXES_FOLDER /fixes
 RUN apk update \
     && apk upgrade --available \
 	  && apk add curl \
@@ -40,5 +44,6 @@ COPY serve.json $WORKDIR
 RUN chmod +x "$START_SCRIPT" \
   && apk del git curl \
   && rm -rf /var/cache/apk/*
-ENTRYPOINT bash $START_SCRIPT chron-schedule="$CRON_SCHEDULE" work-dir="$WORKDIR" days="$DAYS" max_connections="$MAX_CONNECTIONS"
+SHELL ["/bin/bash", "-c"]
+ENTRYPOINT bash $START_SCRIPT chron-schedule="$CRON_SCHEDULE" work-dir="$WORKDIR" days="$DAYS" max_connections="$MAX_CONNECTIONS" enable_fixes="$ENABLE_FIXES"
 EXPOSE 3000
