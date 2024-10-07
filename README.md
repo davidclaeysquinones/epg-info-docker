@@ -62,6 +62,8 @@ services:
     environment:
       # specify the time zone for the server
       - TZ=Etc/UTC
+      # uncomment the underlying line if you want to enable custom fixes
+      #- ENABLE_FIXES=true
     restart: unless-stopped
 ```
 
