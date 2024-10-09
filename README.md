@@ -53,7 +53,7 @@ version: '3.3'
 services:
   epg:
     image: git.claeyscloud.com/david/epg-info:latest
-    #image: git.claeyscloud.com/david/epg-info:latest:latest
+    #image: ghcr.io/davidclaeysquinones/epg-info:latest
     #image: davidquinonescl/epg-info:latest
     volumes:
       # add a mapping in order to add the channels file
