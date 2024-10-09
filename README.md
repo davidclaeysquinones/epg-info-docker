@@ -53,7 +53,8 @@ version: '3.3'
 services:
   epg:
     image: git.claeyscloud.com/david/epg-info:latest
-    #image: image: git.claeyscloud.com/david/epg-info:latest:latest
+    #image: git.claeyscloud.com/david/epg-info:latest:latest
+    #image: davidquinonescl/epg-info:latest
     volumes:
       # add a mapping in order to add the channels file
       - /docker/epg:/config
