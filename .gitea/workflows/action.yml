@@ -11,7 +11,7 @@ jobs:
           working-directory: ${{ GITHUB_WORKSPACE }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Docker
         run: |
             echo "Checking docker installation"
@@ -23,17 +23,24 @@ jobs:
             fi
       - name: Set up Docker Buildx
         uses: https://github.com/docker/setup-buildx-action@v3
-      - name: Docker login
+      - name: Login to Gitea container registry
         uses: https://github.com/docker/login-action@v3
         with:
           registry: git.claeyscloud.com
           username: nologin
           password: ${{ secrets.PACKAGE_TOKEN }}
+      - name: Login to DockerHub container registry
+        uses: https://github.com/docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME}}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-            images: git.claeyscloud.com/david/epg-info
+            images: |
+                epg-info
+                git.claeyscloud.com/david/epg-info
             tags: |
                type=semver,pattern={{raw}}
                type=sha
