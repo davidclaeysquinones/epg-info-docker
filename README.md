@@ -76,27 +76,27 @@ Normally when a change is made in the source repository the documention is updat
 
 Sometimes a new version of this image will be bound to the same source commit. This will happen when improvements are made to the image.
 
-- 1.0.0 
+- 1.0.0 <br>
   [08-01-2024](https://github.com/iptv-org/epg/commit/793c74ca397504fc2afc8fbfa998e0b8e4ca45d9)
-- 1.0.1 
+- 1.0.1 <br>
   [08-14-2024](https://github.com/iptv-org/epg/commit/270e85cfae6f0f691c2e6ab7ce511d60fd687565)
-- 1.0.2 
+- 1.0.2 <br>
   [09-07-2024](https://github.com/iptv-org/epg/commit/4e3b06a86e225cdd1b9362a683e6770fb68ff28f)
-- 1.0.3 
+- 1.0.3 <br>
   [09-14-2024](https://github.com/iptv-org/epg/commit/c69f3c93b1123ddf0fecc62c7067fced59ae4e99)
-- 1.0.4 
+- 1.0.4 <br>
   [09-30-2024](https://github.com/iptv-org/epg/commit/d90c7a54b941238cb92391b33d80a75e746d3002)
-- 1.0.5 
+- 1.0.5 <br>
   [10-02-2024](https://github.com/iptv-org/epg/commit/713dbf60a1cb9623ffcab6ab370ee9a78b32102b)
-- 1.0.6 
+- 1.0.6 <br>
   [10-02-2024](https://github.com/iptv-org/epg/commit/713dbf60a1cb9623ffcab6ab370ee9a78b32102b)<br>Adds possibility to enable custom fixes
-- 1.0.7 
+- 1.0.7 <br>
   [10-02-2024](https://github.com/iptv-org/epg/commit/713dbf60a1cb9623ffcab6ab370ee9a78b32102b)<br>Adds improvement to the docker image size
-- 1.0.8 
+- 1.0.8 <br>
   [10-10-2024](https://github.com/iptv-org/epg/commit/2241bc261fd37b8b16e036a0b61167030a5ce2e6)
-- 1.0.9 
+- 1.0.9 <br>
   [10-12-2024](https://github.com/iptv-org/epg/commit/fd382db08da7a96150928b8dcfef115e29e661d3)
-- 1.0.10 
-  [10-14-2024](https://github.com/iptv-org/epg/commit/a3e7661f95103cbee4bcb78bd483396680e9abfc)(a3e7661f95103cbee4bcb78bd483396680e9abfc)
-- 1.0.11
-  [10-14-2024](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)(7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)
+- 1.0.10 <br>
+  [10-14-2024 12:50](https://github.com/iptv-org/epg/commit/a3e7661f95103cbee4bcb78bd483396680e9abfc)
+- 1.0.11 <br>
+  [10-14-2024 17:34](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)
