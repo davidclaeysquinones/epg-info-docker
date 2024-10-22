@@ -72,7 +72,7 @@ services:
 
 This image is bound to the content of the [iptv-org/epg](https://github.com/iptv-org/epg) repository. In the underlying list you can see to which commit each version of the docker image is bound. 
 
-Normally when a change is made in the source repository the documention is updated and a new tag is created in this repository. This is completely normal since the source repository is only cloned during the build process of the docker image.
+Normally when a change is made in the source repository the documentation is updated and a new tag is created in this repository. This is completely normal since the source repository is only cloned during the build process of the docker image.
 
 Sometimes a new version of this image will be bound to the same source commit. This will happen when improvements are made to the image.
 
