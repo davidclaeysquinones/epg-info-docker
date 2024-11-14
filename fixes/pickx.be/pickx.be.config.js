@@ -1,3 +1,5 @@
+// credit for this fix goes to davidclaeysquinones for his PR on https://github.com/iptv-org/epg/pull/2430
+
 const axios = require('axios')
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')

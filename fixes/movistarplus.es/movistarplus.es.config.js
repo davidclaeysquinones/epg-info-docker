@@ -1,3 +1,5 @@
+// credit for this fix goes to davidclaeysquinones for his PR on https://github.com/iptv-org/epg/pull/2440
+
 const { DateTime } = require('luxon')
 
 const API_PROD_ENDPOINT = 'https://www.movistarplus.es/programacion-tv'
