@@ -32,7 +32,19 @@ You can do this by creating a mapping in the `/config` folder.
 #### Custom fixes
 
 Through the `ENABLE_FIXES` variable custom provider fixes can be applied to the container.
-By default some fixes are available. If you have suggestions or a problem with them please submit an issue.
+By default some fixes are available. These fixes have been validated before being added to this repo.
+However this option is disabled by default since you might only want to run the unmodified source.
+If you have suggestions or a problem with them please submit an issue.
+
+This the list of the provided custom fixes :
+
+| Provider         | Author                                                        | Status                                                                                                                                                         |
+|------------------|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| movistarplus.es  | [davidclaeysquinones](https://github.com/davidclaeysquinones) | [PR](https://github.com/iptv-org/epg/pull/2440) pending approval                                                                                               |
+| pickx.be         | [davidclaeysquinones](https://github.com/davidclaeysquinones) | [PR](https://github.com/iptv-org/epg/pull/2430) pending approval                                                                                               |
+| telenet.tv       | [davidclaeysquinones](https://github.com/davidclaeysquinones) | [PR](https://github.com/iptv-org/epg/pull/2429) merged since commit [fd382db](https://github.com/iptv-org/epg/commit/fd382db08da7a96150928b8dcfef115e29e661d3) |
+| web.magentatv.de | [klausellus-wallace](https://github.com/klausellus-wallace)   | [PR](https://github.com/iptv-org/epg/pull/2458) pending approval                                                                                               |
+
 If for some reason you want to include your own provider fixes this is possible by creation a mapping in the `/fixes` folder.<br>
 The expected structure is */fixes/`provider_name`/`provider_name`.config.js*.<br>
 It is recommended that you take existing provider code as a base for your customisations.
