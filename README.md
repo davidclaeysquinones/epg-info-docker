@@ -116,3 +116,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [10-14-2024](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)<br>Fix Pickx.be url
 - 1.0.13
   [10-14-2024](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)<br>Add custom fix for web.magentatv.de
+- 1.0.14
+  [10-14-2024](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)<br>Change fix for movistarplus.es in order t owork with new API
