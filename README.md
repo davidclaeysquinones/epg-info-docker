@@ -121,3 +121,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [10-14-2024](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)<br>Change fix for movistarplus.es in order to work with new API
 - 1.0.15
   [11-26-2024](https://github.com/iptv-org/epg/commit/d15911006e163262c0c7f267deae28160c0d7a8f)<br>Add option to customize channel endpoint
+- 1.0.16
+  [11-26-2024](https://github.com/iptv-org/epg/commit/d15911006e163262c0c7f267deae28160c0d7a8f)<br>Fix icons for movistarplus.es
