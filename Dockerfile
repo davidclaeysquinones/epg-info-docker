@@ -2,6 +2,7 @@ FROM node:21-alpine
 ARG GIT_REPO=https://github.com/iptv-org/epg.git
 ARG GIT_BRANCH=master
 ENV CRON_SCHEDULE="0 0,12 * * *"
+ENV API_URL="https://iptv-org.github.io/api"
 ENV DAYS=14
 ENV MAX_CONNECTIONS=10
 ENV ENABLE_FIXES=false
@@ -49,5 +50,5 @@ RUN chmod +x "$START_SCRIPT" \
   && apk del git curl \
   && rm -rf /var/cache/apk/*
 SHELL ["/bin/bash", "-c"]
-ENTRYPOINT bash $START_SCRIPT chron-schedule="$CRON_SCHEDULE" work-dir="$WORKDIR" days="$DAYS" max_connections="$MAX_CONNECTIONS" enable_fixes="$ENABLE_FIXES"
+ENTRYPOINT bash $START_SCRIPT chron-schedule="$CRON_SCHEDULE" work-dir="$WORKDIR" days="$DAYS" max_connections="$MAX_CONNECTIONS" enable_fixes="$ENABLE_FIXES" api_url="$API_URL"
 EXPOSE 3000

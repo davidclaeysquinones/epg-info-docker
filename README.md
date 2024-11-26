@@ -41,7 +41,7 @@ This the list of the provided custom fixes :
 | Provider         | Author                                                        | Status                                                                                                                                                         |
 |------------------|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | movistarplus.es  | [davidclaeysquinones](https://github.com/davidclaeysquinones) | [PR](https://github.com/iptv-org/epg/pull/2440) pending approval                                                                                               |
-| pickx.be         | [davidclaeysquinones](https://github.com/davidclaeysquinones) | [PR](https://github.com/iptv-org/epg/pull/2430) pending approval                                                                                               |
+| pickx.be         | [davidclaeysquinones](https://github.com/davidclaeysquinones) | [PR](https://github.com/iptv-org/epg/pull/2430) merged since commit [d159110](https://github.com/iptv-org/epg/commit/d15911006e163262c0c7f267deae28160c0d7a8f) |
 | telenet.tv       | [davidclaeysquinones](https://github.com/davidclaeysquinones) | [PR](https://github.com/iptv-org/epg/pull/2429) merged since commit [fd382db](https://github.com/iptv-org/epg/commit/fd382db08da7a96150928b8dcfef115e29e661d3) |
 | web.magentatv.de | [klausellus-wallace](https://github.com/klausellus-wallace)   | [PR](https://github.com/iptv-org/epg/pull/2458) pending approval                                                                                               |
 
@@ -51,12 +51,13 @@ It is recommended that you take existing provider code as a base for your custom
 
 ### Environment Variables
 
-| Variable                      | Description                                                                | Default          |
-|-------------------------------|----------------------------------------------------------------------------|------------------|
-| CRON_SCHEDULE                 | CRON expression describing the recurrence for epg retrieval.               | `0 0,12 * * *`   |            
-| DAYS                          | Describes the desired amount of days in the future for for epg retrieval.  | 14               |
-| MAX_CONNECTIONS               | The maximum amount of parallel connections that can be established         | 10               |
+| Variable                      | Description                                                                | Default                          |
+|-------------------------------|----------------------------------------------------------------------------|----------------------------------|
+| CRON_SCHEDULE                 | CRON expression describing the recurrence for epg retrieval.               | `0 0,12 * * *`                   |            
+| DAYS                          | Describes the desired amount of days in the future for for epg retrieval.  | 14                               |
+| MAX_CONNECTIONS               | The maximum amount of parallel connections that can be established         | 10                               |
 | ENABLE_FIXES                  | Some fixes to providers take a long time to be merged into the main branch.<br>When this option is enabled some of these fixes will also be included.<br>The source code for these fixes can be seen under the `fixes` folder.<br> Recreate the container when changing this variable in order for it to take effect  | false            |
+| API_URL                       | The endpoint where channel information will be grabbed                     | `https://iptv-org.github.io/api` |
 
 ### Compose file
 
@@ -117,4 +118,6 @@ Sometimes a new version of this image will be bound to the same source commit. T
 - 1.0.13
   [10-14-2024](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)<br>Add custom fix for web.magentatv.de
 - 1.0.14
-  [10-14-2024](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)<br>Change fix for movistarplus.es in order t owork with new API
+  [10-14-2024](https://github.com/iptv-org/epg/commit/7610f7b9f5cc1ccab8d17f3408a95d31b36ace7c)<br>Change fix for movistarplus.es in order to work with new API
+- 1.0.15
+  [11-26-2024](https://github.com/iptv-org/epg/commit/d15911006e163262c0c7f267deae28160c0d7a8f)<br>Add option to customize channel endpoint
