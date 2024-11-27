@@ -125,3 +125,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [11-26-2024](https://github.com/iptv-org/epg/commit/d15911006e163262c0c7f267deae28160c0d7a8f)<br>Fix icons for movistarplus.es
 - 1.0.17
   [11-26-2024](https://github.com/iptv-org/epg/commit/d15911006e163262c0c7f267deae28160c0d7a8f)<br>Update fix for pickx.be
+- 1.0.18
+  [11-27-2024](https://github.com/iptv-org/epg/commit/78dad4cfb4fc16f078c3b44b5534779c7c645b6b)
