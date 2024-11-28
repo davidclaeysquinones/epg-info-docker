@@ -126,4 +126,6 @@ Sometimes a new version of this image will be bound to the same source commit. T
 - 1.0.17
   [11-26-2024](https://github.com/iptv-org/epg/commit/d15911006e163262c0c7f267deae28160c0d7a8f)<br>Update fix for pickx.be
 - 1.0.18
-  [11-27-2024](https://github.com/iptv-org/epg/commit/78dad4cfb4fc16f078c3b44b5534779c7c645b6b)
+  [11-27-2024 01:51](https://github.com/iptv-org/epg/commit/78dad4cfb4fc16f078c3b44b5534779c7c645b6b)
+- 1.0.19
+  [11-27-2024 15:43](https://github.com/iptv-org/epg/commit/e5f0850b3b2e35ed394f00ac68b699eaabc4f0e4)
