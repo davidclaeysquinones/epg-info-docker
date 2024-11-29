@@ -41,6 +41,7 @@ This the list of the provided custom fixes :
 | Provider         | Author(s)                                                        | Status                                                                                                                                                         |
 |------------------|------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | movistarplus.es  | [davidclaeysquinones](https://github.com/davidclaeysquinones)    | [PR](https://github.com/iptv-org/epg/pull/2440) pending approval                                                                                               |
+| orangetv.es      | [fraudiay79](https://github.com/fraudiay79) and [davidclaeysquinones](https://github.com/davidclaeysquinones)   | PR not submitted                                                                                                |
 | pickx.be         | [davidclaeysquinones](https://github.com/davidclaeysquinones) and [BellezaEmporium](https://github.com/BellezaEmporium)   | [PR](https://github.com/iptv-org/epg/pull/2480) pending approval                                      |
 | telenet.tv       | [davidclaeysquinones](https://github.com/davidclaeysquinones)    | [PR](https://github.com/iptv-org/epg/pull/2429) merged since commit [fd382db](https://github.com/iptv-org/epg/commit/fd382db08da7a96150928b8dcfef115e29e661d3) |
 | web.magentatv.de | [klausellus-wallace](https://github.com/klausellus-wallace)      | [PR](https://github.com/iptv-org/epg/pull/2458) pending approval                                                                                               |
@@ -131,3 +132,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [11-27-2024 15:43](https://github.com/iptv-org/epg/commit/e5f0850b3b2e35ed394f00ac68b699eaabc4f0e4)
 - 1.0.20
   [11-28-2024](https://github.com/iptv-org/epg/commit/da18b70ddb1c3950e5a315411fd9aeaf60b6092c)
+- 1.0.21
+  [11-28-2024](https://github.com/iptv-org/epg/commit/da18b70ddb1c3950e5a315411fd9aeaf60b6092c)<br>Add orangetv.es
