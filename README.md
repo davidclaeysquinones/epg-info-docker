@@ -134,3 +134,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [11-28-2024](https://github.com/iptv-org/epg/commit/da18b70ddb1c3950e5a315411fd9aeaf60b6092c)
 - 1.0.21
   [11-28-2024](https://github.com/iptv-org/epg/commit/da18b70ddb1c3950e5a315411fd9aeaf60b6092c)<br>Add orangetv.es
+- 1.0.22
+  [11-30-2024](https://github.com/iptv-org/epg/commit/1883338c0aee9909ac4567312b25701d10a765f2)
