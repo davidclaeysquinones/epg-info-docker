@@ -44,7 +44,7 @@ This the list of the provided custom fixes :
 | orangetv.es      | [fraudiay79](https://github.com/fraudiay79) and [davidclaeysquinones](https://github.com/davidclaeysquinones)   | PR not submitted                                                                                                |
 | pickx.be         | [davidclaeysquinones](https://github.com/davidclaeysquinones) and [BellezaEmporium](https://github.com/BellezaEmporium)   | [PR](https://github.com/iptv-org/epg/pull/2480) merged since commit [296d616](https://github.com/iptv-org/epg/commit/296d6162ecbeb1b3c3e392845187d30624d50aa2)                                      |
 | telenet.tv       | [davidclaeysquinones](https://github.com/davidclaeysquinones)    | [PR](https://github.com/iptv-org/epg/pull/2429) merged since commit [fd382db](https://github.com/iptv-org/epg/commit/fd382db08da7a96150928b8dcfef115e29e661d3) |
-| web.magentatv.de | [klausellus-wallace](https://github.com/klausellus-wallace)      | [PR](https://github.com/iptv-org/epg/pull/2458) pending approval                                                                                               |
+| web.magentatv.de | [klausellus-wallace](https://github.com/klausellus-wallace)      | [PR](https://github.com/iptv-org/epg/pull/2458) merged since commit [61afe09](https://github.com/iptv-org/epg/commit/61afe090b6e7892cc5426457d960e9452222f885)                                                                                               |
 
 If for some reason you want to include your own provider fixes this is possible by creation a mapping in the `/fixes` folder.<br>
 The expected structure is */fixes/`provider_name`/`provider_name`.config.js*.<br>
