@@ -138,3 +138,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [11-30-2024](https://github.com/iptv-org/epg/commit/1883338c0aee9909ac4567312b25701d10a765f2)
 - 1.0.23
   [12-02-2024](https://github.com/iptv-org/epg/commit/296d6162ecbeb1b3c3e392845187d30624d50aa2)
+- 1.0.24
+  [12-02-2024](https://github.com/iptv-org/epg/commit/296d6162ecbeb1b3c3e392845187d30624d50aa2)<br>Fix for movistarplus.es channel grabber
