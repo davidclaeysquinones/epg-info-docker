@@ -153,4 +153,4 @@ Sometimes a new version of this image will be bound to the same source commit. T
 - 1.0.30
   [12-16-2024](https://github.com/iptv-org/epg/commit/b9bbd32d354315eb292e3b82da09785e575a9781)
 - 1.0.31
-  [12-16-2024](https://github.com/iptv-org/epg/commit/7237a62d94c5691f7f467b334f846efce93b08ff)<br>Fix for Pickx.be + mayor program updates
+  [12-17-2024](https://github.com/iptv-org/epg/commit/7237a62d94c5691f7f467b334f846efce93b08ff)<br>Fix for Pickx.be + mayor program updates
