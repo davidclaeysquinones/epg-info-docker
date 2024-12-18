@@ -26,8 +26,8 @@ fi
 
 sed -i -E "s/(https:\x2f\x2fiptv-org.github.io\x2fapi)/$api_url/g" $work_dir/scripts/core/apiClient.ts
 
-pm2 --name epg start npm -- run serve
-npm run grab -- --channels=channels.xml --maxConnections=$max_connections --days=$days --gzip
+pm2 --name epg start npm run serve
+npm run grab --- --channels=channels.xml --maxConnections=$max_connections --days=$days --gzip
 ln -s $work_dir/guide.xml /public/guide.xml
 ln -s $work_dir/guide.xml.gz /public/guide.xml.gz
-npm run grab -- --channels=channels.xml --cron="$chron_schedule" --maxConnections=$max_connections --days=$days --gzip
+npm run grab --- --channels=channels.xml --cron="$chron_schedule" --maxConnections=$max_connections --days=$days --gzip

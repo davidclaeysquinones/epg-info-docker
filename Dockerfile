@@ -1,4 +1,4 @@
-FROM node:21-alpine
+FROM node:22-alpine
 ARG GIT_REPO=https://github.com/iptv-org/epg.git
 ARG GIT_BRANCH=master
 ENV CRON_SCHEDULE="0 0,12 * * *"
@@ -22,7 +22,7 @@ RUN apk update \
     && npm install pm2 -g \
     && mkdir $(echo "${BIN_FOLDER}/${EPG_FOLDER}") -p \
     && git -C $(echo "${BIN_FOLDER}") clone --depth 1 -b $(echo "${GIT_BRANCH} ${GIT_REPO}") \
-    && cd $WORKDIR && npm install && npm update \
+    && cd $WORKDIR && npm install && npm update \ 
     && rm .eslintrc.json \
     && rm -rf .github \
     && rm -rf .git \
