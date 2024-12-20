@@ -1,33 +1,26 @@
-// credit for this fix goes to davidclaeysquinones for his PR on https://github.com/iptv-org/epg/pull/2430, https://github.com/iptv-org/epg/pull/2520 and to BellezaEmporium for his PR on https://github.com/iptv-org/epg/pull/2480
+// credit for this fix goes to davidclaeysquinones for his PR on https://github.com/iptv-org/epg/pull/2430, https://github.com/iptv-org/epg/pull/2520 and to BellezaEmporium for his PR on https://github.com/iptv-org/epg/pull/2480, https://github.com/iptv-org/epg/pull/2525
 
 const axios = require('axios')
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 
 let apiVersion
-let isApiVersionFetched = false
-
-;(async () => {
-  try {
-    await fetchApiVersion()
-    isApiVersionFetched = true
-  } catch (error) {
-    console.error('Error during script initialization:', error)
-  }
-})()
 
 dayjs.extend(utc)
 
 module.exports = {
   site: 'pickx.be',
   days: 2,
-  apiVersion: function () {
+  setApiVersion: function (version) {
+    apiVersion = version
+  },
+  getApiVersion: function () {
     return apiVersion
   },
-  fetchApiVersion: fetchApiVersion, // Export fetchApiVersion
+  fetchApiVersion: fetchApiVersion,
   url: async function ({ channel, date }) {
-    while (!isApiVersionFetched) {
-      await new Promise(resolve => setTimeout(resolve, 100)) // Wait for 100 milliseconds
+    if (!apiVersion) {
+      await fetchApiVersion()
     }
     return `https://px-epg.azureedge.net/airings/${apiVersion}/${date.format(
       'YYYY-MM-DD'
@@ -118,7 +111,7 @@ module.exports = {
         }`
     }
     const result = await axios
-      .post('https://api.proximusmwc.be/tiams/v2/graphql', query)
+      .post('https://api.proximusmwc.be/tiams/v3/graphql', query)
       .then(r => r.data)
       .catch(console.error)
 
@@ -142,7 +135,7 @@ function fetchApiVersion() {
   return new Promise(async (resolve, reject) => {
     try {
       // you'll never find what happened here :)
-      // load pickx bundle and get react version hash (regex).
+      // load the pickx page and get the hash from the MWC configuration.
       // it's not the best way to get the version but it's the only way to get it.
 
       const hashUrl = 'https://www.pickx.be/nl/televisie/tv-gids';

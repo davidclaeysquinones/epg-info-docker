@@ -41,8 +41,8 @@ This the list of the provided custom fixes :
 | Provider         | Author(s)                                                        | Status                                                                                                                                                         |
 |------------------|------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | movistarplus.es  | [davidclaeysquinones](https://github.com/davidclaeysquinones)    | [PR](https://github.com/iptv-org/epg/pull/2440) pending approval                                                                                               |
-| orangetv.es      | [fraudiay79](https://github.com/fraudiay79) and [davidclaeysquinones](https://github.com/davidclaeysquinones)   | PR not submitted                                                                                                |
-| pickx.be         | [davidclaeysquinones](https://github.com/davidclaeysquinones) and [BellezaEmporium](https://github.com/BellezaEmporium)   | [PR](https://github.com/iptv-org/epg/pull/2520) pending approval                                      |
+| orangetv.es      | [fraudiay79](https://github.com/fraudiay79) and [davidclaeysquinones](https://github.com/davidclaeysquinones)   | [PR](https://github.com/iptv-org/epg/pull/2485) not in draft stage                                              |
+| pickx.be         | [davidclaeysquinones](https://github.com/davidclaeysquinones) and [BellezaEmporium](https://github.com/BellezaEmporium)   | [PR](https://github.com/iptv-org/epg/pull/2525) merged since commit [fd91a9c] (https://github.com/iptv-org/epg/commit/fd91a9c532b476f6e192a564371d30e766b762ab)                                    |
 | telenet.tv       | [davidclaeysquinones](https://github.com/davidclaeysquinones)    | [PR](https://github.com/iptv-org/epg/pull/2429) merged since commit [fd382db](https://github.com/iptv-org/epg/commit/fd382db08da7a96150928b8dcfef115e29e661d3) |
 | web.magentatv.de | [klausellus-wallace](https://github.com/klausellus-wallace)      | [PR](https://github.com/iptv-org/epg/pull/2458) merged since commit [61afe09](https://github.com/iptv-org/epg/commit/61afe090b6e7892cc5426457d960e9452222f885)                                                                                               |
 
@@ -154,3 +154,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [12-16-2024](https://github.com/iptv-org/epg/commit/b9bbd32d354315eb292e3b82da09785e575a9781)
 - 1.0.31
   [12-17-2024](https://github.com/iptv-org/epg/commit/7237a62d94c5691f7f467b334f846efce93b08ff)<br>Fix for Pickx.be + mayor program updates
+- 1.0.32
+  [12-20-2024](https://github.com/iptv-org/epg/commit/f00d53cb7be3cd7f6625897709cab005fe1b3dc4)
