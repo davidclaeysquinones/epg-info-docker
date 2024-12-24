@@ -24,7 +24,7 @@
   <channel site="orangetv.es" lang="es" xmltv_id="Enfamilia.es" site_id="11063">Enfamilia</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="Decasa.es" site_id="11027">Decasa</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="CanalCocina.es" site_id="11020">CanalCocina</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="RuntimeSeries.es" site_id="11093">Runtime Series</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="PlutoTVSeries.es" site_id="11093">Runtime Series</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="FactoriadeFiccion.es" site_id="1032">FDF</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="Neox.es" site_id="1027">Neox</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="Energy.es" site_id="1030">Energy</channel>
@@ -37,13 +37,13 @@
   <channel site="orangetv.es" lang="es" xmltv_id="TCM.es" site_id="11012">TCM</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="SundanceTV.es" site_id="11052">Sundance TV</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="Dark.es" site_id="11053">Dark</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="RuntimeCineSeries.es" site_id="1089">Runtime Cine y Series</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="PlutoTVSeries.es" site_id="1089">Runtime Cine y Series</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="RuntimeCineTerror.es" site_id="11091">Runtime Thriller/Terror</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="RuntimeAccion.es" site_id="11094">Runtime Acción</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="RuntimeComedia.es" site_id="11092">Runtime Comedia</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="PlutoTVCineAccion.es" site_id="11094">Runtime Acción</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="PlutoTVSeriesComedia.es" site_id="11092">Runtime Comedia</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="RuntimeCrimen.es" site_id="11095">Runtime Crimen</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="RuntimeRomance.es" site_id="11096">Runtime Romance</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="RunTimeClasico.es" site_id="11097">RunTime Clásico</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="PlutoTVCineRomantico.es" site_id="11096">Runtime Romance</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="PlutoTVCineClasico.es" site_id="11097">RunTime Clásico</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="CinesVerdiTV.es" site_id="11098">Cines Verdi TV</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="CineFeelGood.es" site_id="11099">Cine Feel Good</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="ParamountNetwork.es" site_id="12032">Paramount Network</channel>
@@ -122,8 +122,8 @@
   <channel site="orangetv.es" lang="es" xmltv_id="LaLigaTV2porMovistarPlusPlus.es" site_id="1057">M+ LALIGATV 3</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="LaLigaTV3porMovistarPlusPlus.es" site_id="1058">M+ LALIGATV 4</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="LaLigaTV.es" site_id="11129">LA LIGA TV</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="DAZNLaLiga" site_id="11077">DAZN LALIGA</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="DAZNLaLiga2" site_id="11080">DAZN LALIGA 2</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="DAZNLaLiga.es" site_id="11077">DAZN LALIGA</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="DAZNLaLiga2.es" site_id="11080">DAZN LALIGA 2</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="LaLigaHypermotion.es" site_id="11083">LALIGATV HYPERMOTION</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="LaLigaHypermotion2.es" site_id="11084">LALIGATV HYPERMOTION 2</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="LaLigaHypermotion3.es" site_id="11085">LALIGATV HYPERMOTION 3</channel>
@@ -145,7 +145,7 @@
   <channel site="orangetv.es" lang="es" xmltv_id="EWTNEspanaLatinAmerica.us" site_id="1068">EWTN</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="Gulli.fr" site_id="1077">Gulli</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="France2.fr" site_id="1082">France 2</channel>
-  <channel site="orangetv.es" lang="es" xmltv_id="France5" site_id="1083">France 5</channel>
+  <channel site="orangetv.es" lang="es" xmltv_id="France5.fr" site_id="1083">France 5</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="TraceSportStars.fr" site_id="1095">Trace Sport Stars</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="TV5MondeEurope.fr" site_id="11023">TV5MONDE</channel>
   <channel site="orangetv.es" lang="es" xmltv_id="QwestTV.fr" site_id="1088">Qwest TV</channel>
