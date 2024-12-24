@@ -11,7 +11,7 @@ A public mirror is available at https://github.com/davidclaeysquinones/epg-info-
 [pm2](https://www.npmjs.com/package/pm2)<br>
 [serve](https://www.npmjs.com/package/serve)<br>
 
-The image is based on `node:21-alpine` in order to be more lightweight.
+The image is based on `node:22-alpine` in order to be more lightweight.
 The `pm2` and `serve` packages are used in order to run the application in the container. 
 ## Docker image
 
@@ -156,3 +156,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [12-17-2024](https://github.com/iptv-org/epg/commit/7237a62d94c5691f7f467b334f846efce93b08ff)<br>Fix for Pickx.be + mayor program updates
 - 1.0.32
   [12-20-2024](https://github.com/iptv-org/epg/commit/f00d53cb7be3cd7f6625897709cab005fe1b3dc4)
+- 1.0.33
+  [12-21-2024](https://github.com/iptv-org/epg/commit/c108aa586e25d2e8914baeca6c05cc6755718665)
