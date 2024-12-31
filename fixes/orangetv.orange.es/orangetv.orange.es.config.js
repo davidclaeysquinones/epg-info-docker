@@ -1,7 +1,3 @@
-// credit for this fix goes to fraudiay79, BellezaEmporium and to davidclaeysquinones for their work
-// the PR is not submitted since the test suite for this provider needs to be developed
-// for now the source code can be found at https://github.com/davidclaeysquinones/epg/tree/orangetv.orange.es
-
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 const axios = require('axios')
@@ -13,7 +9,7 @@ const API_CHANNEL_ENDPOINT = 'https://pc.orangetv.orange.es/pc/api/rtv/v1/GetCha
 const API_IMAGE_ENDPOINT = 'https://pc.orangetv.orange.es/pc/api/rtv/v1/images'
 
 module.exports = {
-  site: 'orangetv.es',
+  site: 'orangetv.orange.es',
   days: 2,
   request: {
     cache: {
