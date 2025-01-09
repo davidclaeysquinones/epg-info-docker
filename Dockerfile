@@ -23,7 +23,8 @@ RUN apk update \
     && mkdir $(echo "${BIN_FOLDER}/${EPG_FOLDER}") -p \
     && git -C $(echo "${BIN_FOLDER}") clone --depth 1 -b $(echo "${GIT_BRANCH} ${GIT_REPO}") \
     && cd $WORKDIR && npm install && npm update \ 
-    && rm .eslintrc.json \
+    && rm -rf .sites \
+    && rm -rf .husky \
     && rm -rf .github \
     && rm -rf .git \
     && rm .gitignore  \
@@ -41,7 +42,12 @@ RUN apk update \
     && rm -rf node_modules/**/.github \
     && rm -rf node_modules/**/docs \
     && rm -rf node_modules/**/LICENSE \
+    && rm -rf node_modules/**/license \
     && rm -rf node_modules/**/**.md \
+    && rm -rf node_modules/**/**/LICENSE \
+    && rm -rf node_modules/**/**/license \
+    && rm -rf node_modules/**/**/.github \
+    && rm -rf node_modules/**/**/**.md \
     && ln -s /config/channels.xml $(echo "${WORKDIR}/channels.xml") \
     && mkdir /public
 COPY start.sh $WORKDIR
