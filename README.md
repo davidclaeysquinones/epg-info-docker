@@ -170,3 +170,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [13-01-2025](https://github.com/iptv-org/epg/commit/9a565f16f4016e49d17b762477e0f6d29bb0f970)
 - 1.0.39
   [14-01-2025](https://github.com/iptv-org/epg/commit/76df1541d8b0b90533ea74dcbb7815c27425b608)
+- 1.0.40
+  [14-01-2025](https://github.com/iptv-org/epg/commit/76df1541d8b0b90533ea74dcbb7815c27425b608)<br> Fixes issue with api url

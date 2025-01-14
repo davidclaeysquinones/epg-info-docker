@@ -24,7 +24,7 @@ if [ "$enable_fixes" = true ] ; then
  cp -R /fixes/* /bin/epg/sites/
 fi
 
-sed -i -E "s/(https:\x2f\x2fiptv-org.github.io\x2fapi)/$api_url/g" $work_dir/scripts/core/apiClient.ts
+sed -i -E "s/(https:\x2f\x2fiptv-org.github.io\x2fapi$\123filename\125)/$api_url$\123filename\125/g" $work_dir/scripts/core/apiClient.ts
 
 pm2 --name epg start npm -- run serve
 npm run grab --- --channels=channels.xml --maxConnections=$max_connections --days=$days --gzip
