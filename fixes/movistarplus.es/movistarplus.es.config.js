@@ -1,107 +1,60 @@
-const { DateTime } = require('luxon')
-
-const API_PROGRAM_ENDPOINT = 'https://comunicacion.movistarplus.es'
-const API_IMAGE_ENDPOINT = 'https://www.movistarplus.es/recorte/n/externov';
+const axios = require('axios')
+const cheerio = require('cheerio')
+const dayjs = require('dayjs')
 
 module.exports = {
   site: 'movistarplus.es',
   days: 2,
-  url: function ({ channel, date }) {
-    return `${API_PROGRAM_ENDPOINT}/wp-admin/admin-ajax.php`
+  url({ channel, date }) {
+    return `https://www.movistarplus.es/programacion-tv/${channel.site_id}/${date.format(
+      'YYYY-MM-DD'
+    )}`
   },
-  request: {
-    method: 'POST',
-    headers: {
-      Origin: API_PROGRAM_ENDPOINT,
-      Referer: `${API_PROGRAM_ENDPOINT}/programacion/`,
-      "Content-Type" : 'application/x-www-form-urlencoded; charset=UTF-8',
-    },
-    data: function ({ channel, date }) {
-      return {
-        action: 'getProgramation',
-        day: date.format('YYYY-MM-DD'),
-        "channels[]": channel.site_id,
-      };
-    },
-  },
-  parser({ content, channel, date }) {
+  parser({ content }) {
     let programs = []
-    let items = parseItems(content, channel);
-    if (!items.length) return programs;
-
-    items.forEach(item => {
-      let startTime = DateTime.fromFormat(
-        `${item.f_evento_rejilla}`,
-        'yyyy-MM-dd HH:mm:ss',
-        { zone: 'Europe/Madrid' }
-      ).toUTC();
-
-      let stopTime = DateTime.fromFormat(
-        `${item.f_fin_evento_rejilla}`,
-        'yyyy-MM-dd HH:mm:ss',
-        { zone: 'Europe/Madrid' }
-      ).toUTC()
-
-      // Adjust stop time if it's on the next day
-      if (stopTime < startTime) {
-        stopTime = stopTime.plus({ days: 1 });
-      }
-
+    let items = parseItems(content)
+    if (!items.length) return programs
+    items.forEach(el => {
       programs.push({
-        title: item.des_evento_rejilla,
-        icon: parseIcon(item, channel),
-        category: item.des_genero,
-        start: startTime,
-        stop: stopTime,
+        title: el.item.name,
+        start: dayjs(el.item.startDate),
+        stop: dayjs(el.item.endDate)
       })
     })
-
     return programs
   },
   async channels() {
-    const axios = require('axios')
-    //const dayjs = require('dayjs')
-    const data = await axios
-      .post(`${API_PROGRAM_ENDPOINT}/wp-admin/admin-ajax.php`,
-        {
-          action: 'getChannels',
-        },
-        {
-          headers: {
-            Origin: API_PROGRAM_ENDPOINT,
-            Referer: `${API_PROGRAM_ENDPOINT}/programacion/`,
-            "Content-Type" : 'application/x-www-form-urlencoded; charset=UTF-8',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36 Edg/79.0.309.71'
-          }
-        }
-      )
+    const html = await axios
+      .get('https://www.movistarplus.es/programacion-tv')
       .then(r => r.data)
       .catch(console.log)
 
-    return Object.values(data).map(item => {
+    const $ = cheerio.load(html)
+    let scheme = $('script:contains(ItemList)').html()
+    scheme = JSON.parse(scheme)
+
+    return scheme.itemListElement.map(el => {
+      const urlParts = el.item.url.split('/')
+      const site_id = urlParts.pop().toLowerCase()
+
       return {
         lang: 'es',
-        site_id: item.cod_cadena_tv,
-        name: item.des_cadena_tv
+        name: el.item.name,
+        site_id
       }
     })
   }
 }
 
+function parseItems(content) {
+  try {
+    const $ = cheerio.load(content)
+    let scheme = $('script:contains("@type": "ItemList")').html()
+    scheme = JSON.parse(scheme)
+    if (!scheme || !Array.isArray(scheme.itemListElement)) return []
 
-function parseIcon(item, channel) {
-  if(item.cod_elemento_emision)
-  {
-    	return `${API_IMAGE_ENDPOINT}/M${channel.site_id}P${item.cod_elemento_emision}`
+    return scheme.itemListElement
+  } catch {
+    return []
   }
-  
-  return ''
-}
-
-function parseItems(content, channel) {
-  const json = typeof content === 'string' ? JSON.parse(content) : content;
-  const data = json.channelsProgram;
-
-  if (data.length !== 1) return [];
-  return data[0];
 }
