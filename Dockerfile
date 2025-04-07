@@ -52,6 +52,7 @@ RUN apk update \
     && mkdir /public
 COPY start.sh $WORKDIR
 COPY serve.json $WORKDIR
+COPY pm2.config.js $WORKDIR
 RUN chmod +x "$START_SCRIPT" \
   && apk del git curl \
   && rm -rf /var/cache/apk/*
