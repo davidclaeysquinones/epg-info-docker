@@ -56,6 +56,7 @@ It is recommended that you take existing provider code as a base for your custom
 |-------------------------------|----------------------------------------------------------------------------|----------------------------------|
 | CRON_SCHEDULE                 | CRON expression describing the recurrence for epg retrieval.               | `0 0,12 * * *`                   |            
 | DAYS                          | Describes the desired amount of days in the future for for epg retrieval.  | 14                               |
+| DELAY                         | Delay between requests in milliseconds                                     | 0                                |
 | MAX_CONNECTIONS               | The maximum amount of parallel connections that can be established         | 10                               |
 | ENABLE_FIXES                  | Some fixes to providers take a long time to be merged into the main branch.<br>When this option is enabled some of these fixes will also be included.<br>The source code for these fixes can be seen under the `fixes` folder.<br> Recreate the container when changing this variable in order for it to take effect  | false            |
 | API_URL                       | The endpoint where channel information will be grabbed                     | `https://iptv-org.github.io/api` |
@@ -212,3 +213,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [04-04-2025](https://github.com/iptv-org/epg/commit/4df25c92bcad1e4892640f532eae71cf9f5e7b95)<br>Includes fixes for new configuration changes
 - 1.0.60
   [04-07-2025](https://github.com/iptv-org/epg/commit/7e1fbcbe154f4efd5c81341351cceb06f71b79a0)
+- 1.0.61
+  [04-07-2025](https://github.com/iptv-org/epg/commit/7e1fbcbe154f4efd5c81341351cceb06f71b79a0)<br>Add delay option
