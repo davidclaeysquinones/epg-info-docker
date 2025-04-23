@@ -215,3 +215,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [04-07-2025](https://github.com/iptv-org/epg/commit/7e1fbcbe154f4efd5c81341351cceb06f71b79a0)
 - 1.0.61
   [04-07-2025](https://github.com/iptv-org/epg/commit/7e1fbcbe154f4efd5c81341351cceb06f71b79a0)<br>Add delay option
+- 1.0.62
+  [04-22-2025](https://github.com/iptv-org/epg/commit/db56a4d6c0ec7f1169ae60361b623dc032365e47)
