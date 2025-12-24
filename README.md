@@ -237,3 +237,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [11-15-2025](https://github.com/iptv-org/epg/commit/4ed1e39d95da18d54628525f9173b7b7f7ae1d21) 
 - 1.0.72
   [11-23-2025](https://github.com/iptv-org/epg/commit/9b331e6cfab19ad2f683b212aa079aac07fe72fe) 
+- 1.0.73
+  [12-24-2025](https://github.com/iptv-org/epg/commit/ba1fb58194464a6c50a597ac28a35dc8a4895038) 
