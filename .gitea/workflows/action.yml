@@ -21,6 +21,13 @@ jobs:
                 echo "Docker installation not found. Docker will be installed"
                 curl -fsSL https://get.docker.com | sh
             fi
+      - name: Install Fetch
+        run: |
+            echo "Installing fetch"
+            apt-get install -y curl
+            curl -fsSL https://deb.nodesource.com/setup_24.x | bash
+            npm install -g npm
+            npm install node-fetch
       - name: Set up Docker Buildx
         uses: https://github.com/docker/setup-buildx-action@v3
       - name: Login to Gitea container registry
