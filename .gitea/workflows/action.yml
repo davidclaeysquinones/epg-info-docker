@@ -55,12 +55,12 @@ jobs:
             tags: |
                type=semver,pattern={{raw}}
                type=sha
-      - name: Update docker Hub Description
-        uses: https://github.com/peter-evans/dockerhub-description@v5
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          repository: davidquinonescl/epg-info         
+      #- name: Update docker Hub Description
+      #  uses: https://github.com/peter-evans/dockerhub-description@v5
+      #  with:
+      #    username: ${{ secrets.DOCKER_HUB_USERNAME }}
+      #    password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      #    repository: davidquinonescl/epg-info         
       - name: Build and push
         uses: https://github.com/docker/build-push-action@v5
         with:
