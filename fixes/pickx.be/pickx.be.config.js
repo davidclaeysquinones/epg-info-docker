@@ -1,4 +1,4 @@
-// credit for this fix goes to davidclaeysquinones for his PR on https://github.com/iptv-org/epg/pull/2430, https://github.com/iptv-org/epg/pull/2520 and to BellezaEmporium for his PR on https://github.com/iptv-org/epg/pull/2480, https://github.com/iptv-org/epg/pull/2525
+//https://github.com/iptv-org/epg/blob/e4f92bb2a2768dcba3dbbd52b19d78d96bebc31e/sites/pickx.be/pickx.be.config.js
 
 const axios = require('axios')
 const dayjs = require('dayjs')
@@ -36,7 +36,7 @@ module.exports = {
             ? item.program.translatedCategory[channel.lang]
             : item.program.category.split('.')[1],
           image: item.program.posterFileName
-            ? `https://experience-cache.proximustv.be/posterserver/poster/EPG/w-166_h-110/${item.program.posterFileName}`
+            ? `https://experience-cache.cdi.streaming.proximustv.be/posterserver/poster/EPG/${item.program.posterFileName}`
             : null,
           season: item.program.seasonNumber,
           episode: item.program.episodeNumber,
