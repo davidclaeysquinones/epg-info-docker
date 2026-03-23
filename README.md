@@ -253,3 +253,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
   <br>Includes fix for pickx.be provider
 - 1.0.79
   [03-16-2026](https://github.com/iptv-org/epg/commit/d10c95f326b8c36798c47e63bfd28ec0f116f974)
+- 1.0.80
+  [03-23-2026](https://github.com/iptv-org/epg/commit/9d6339bf0f22444fa8967f0a5b2af64d13a7cdc3)
