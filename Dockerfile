@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:24-alpine
 ARG GIT_REPO=https://github.com/iptv-org/epg.git
 ARG GIT_BRANCH=master
 ENV CRON_SCHEDULE="0 0,12 * * *"
@@ -23,20 +23,22 @@ RUN apk update \
     && npm install pm2 -g \
     && mkdir $(echo "${BIN_FOLDER}/${EPG_FOLDER}") -p \
     && git -C $(echo "${BIN_FOLDER}") clone --depth 1 -b $(echo "${GIT_BRANCH} ${GIT_REPO}") \
-    && cd $WORKDIR && npm install && npm update \ 
+    && cd $WORKDIR && npm install && npm update \
     && rm -rf .sites \
     && rm -rf .husky \
     && rm -rf .github \
     && rm -rf .git \
-    && rm .gitignore  \
-    && rm CONTRIBUTING.md  \
-    && rm LICENSE \
-    && rm README.md \
-    && rm SITES.md \
+    && rm Dockerfile \
+    && rm .gitignore \
+    && rm -f CONTRIBUTING.md \
+    && rm -f GUIDES.md \
+    && rm -f LICENSE \
+    && rm -f README.md \ 
+    && rm -f SITES.md \
     && rm -rf tests \
-    && rm sites/**/readme.md \
+    && rm -f sites/**/readme.md \
     && rm -rf sites/**/__data__ \
-    && rm sites/**/**.test.js \
+    && rm -f sites/**/**.test.js \
     && rm -rf node_modules/**/.package-lock.json \
     && rm -rf node_modules/**/.tsconfig.json \
     && rm -rf node_modules/**/.tsconfig.tsbuildinfo.json \
