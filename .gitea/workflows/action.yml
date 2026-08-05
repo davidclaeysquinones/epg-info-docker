@@ -25,6 +25,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Login to Lavaforge container registry
+        uses: https://github.com/docker/login-action@v3
+        with:
+          registry: lavaforge.org
+          username: ${{ secrets.LAVAFORGE_USERNAME }}
+          password: ${{ secrets.LAVAFORGE_PASSWORD }}   
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
@@ -37,6 +43,9 @@ jobs:
             images: |
                 davidquinonescl/epg-info
                 git.claeyscloud.com/david/epg-info
+                lavaforge.org/davidquinonescl/epg-info
+            flavor: |
+                latest=true
             tags: |
                type=semver,pattern={{raw}}
                type=sha
