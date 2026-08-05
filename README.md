@@ -4,14 +4,20 @@ This repo builds and Docker image of [iptv-org/epg](https://github.com/iptv-org/
 The purpose is to make the deployment easier and more suitable for different environments.
 
 The original repository of this image is hosted on https://git.claeyscloud.com/david/epg-info-docker.<br>
-A public mirror is available at https://github.com/davidclaeysquinones/epg-info-docker.
+A mirror of this repository can be found in https://github.com/davidclaeysquinones/epg-info-docker and in [lavaforge](https://lavaforge.org/davidquinonescl/epg-info-docker).
+
+The image is distributed in the following container registries :
+ - [gitea](https://git.claeyscloud.com/david/-/packages/container/epg-info/latest)
+ - [lavaforge](https://lavaforge.org/davidquinonescl/-/packages/container/epg-info/latest)
+ - [github](https://github.com/davidclaeysquinones/epg-info-docker/pkgs/container/epg-info)
+ - [docker hub](https://hub.docker.com/repository/docker/davidquinonescl/epg-info/general)
 
 ## Dependencies
 [Node](https://nodejs.org/en)<br>
 [pm2](https://www.npmjs.com/package/pm2)<br>
 [serve](https://www.npmjs.com/package/serve)<br>
 
-The image is based on `node:22-alpine` in order to be more lightweight.
+The image is based on `node:24-alpine` in order to be more lightweight.
 The `pm2` and `serve` packages are used in order to run the application in the container. 
 ## Docker image
 
