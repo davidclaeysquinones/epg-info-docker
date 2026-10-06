@@ -108,6 +108,10 @@ async function fetchApiVersion() {
     })
     .catch(console.error)
 
+  if (typeof hashData !== 'string' || !/^[A-Za-z0-9_-]+$/.test(hashData)) {
+    throw new Error('Invalid React app version hash')
+  }
+
   const versionUrl = `https://www.pickx.be/api/s-${hashData}`
   const response = await axios.get(versionUrl, {
     headers: {
