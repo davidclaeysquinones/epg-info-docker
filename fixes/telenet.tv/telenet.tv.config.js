@@ -1,215 +1,263 @@
-//https://github.com/iptv-org/epg/blob/master/sites/web.magentatv.de/web.magentatv.de.config.js
+//https://github.com/iptv-org/epg/blob/master/sites/telenet.tv/telenet.tv.config.js
 
 const axios = require('axios')
 const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-const customParseFormat = require('dayjs/plugin/customParseFormat')
+const doFetch = require('@ntlab/sfetch')
 
-let X_CSRFTOKEN
-let Cookie
-const cookiesToExtract = ['JSESSIONID', 'CSESSIONID', 'CSRFSESSION']
+const API_STATIC_ENDPOINT = 'https://staticqbr-prod-be.gnp.cloud.telenet.tv/eng/web/epg-service-lite/be'
+const API_PROD_ENDPOINT = 'https://spark-prod-be.gnp.cloud.telenet.tv/eng/web/linear-service/v2'
+const API_IMAGE_ENDPOINT = 'https://staticqbr-prod-be.gnp.cloud.telenet.tv/image-service'
 
-dayjs.extend(utc)
-dayjs.extend(customParseFormat)
+// a segment holds 6 hours of guide for every channel at once, so it is kept around
+// and shared between all the channels of the same day
+const segments = {}
+
+// which day emitted an event, per channel, so a broadcast running past midnight is not repeated
+// by the day it ends in
+const claimed = {}
 
 module.exports = {
-  site: 'web.magentatv.de',
+  site: 'telenet.tv',
   days: 2,
-  url: 'https://api.prod.sngtv.magentatv.de/EPG/JSON/PlayBillList',
   request: {
-    method: 'POST',
-    async headers() {
-      return await setHeaders()
-    },
-    data({ channel, date }) {
-      return {
-        count: -1,
-        isFillProgram: 1,
-        offset: 0,
-        properties: [
-          {
-            include:
-              'endtime,genres,id,name,starttime,channelid,pictures,introduce,subName,seasonNum,subNum,cast,country,producedate,externalIds',
-            name: 'playbill'
-          }
-        ],
-        type: 2,
-        begintime: date.format('YYYYMMDD000000'),
-        channelid: channel.site_id,
-        endtime: date.add(1, 'd').format('YYYYMMDD000000')
-      }
+    cache: {
+      ttl: 60 * 60 * 1000 // 1 hour
     }
   },
-  parser({ content }) {
-    const programs = []
-    const items = parseItems(content)
-    items.forEach(item => {
-      programs.push({
-        title: item.name,
-        description: item.introduce,
+  url: function ({ date, channel, segment = 0 }) {
+    return `${API_STATIC_ENDPOINT}/${channel.lang}/events/segments/${date.format(
+      'YYYYMMDD'
+    )}${segment.toString().padStart(2, '0')}0000`
+  },
+  async parser({ content, channel, date }) {
+    const items = await loadItems({ content, channel, date })
+    if (!items.length) return []
+
+    const details = await loadProgramDetails(items, channel)
+
+    return items.map((item, index) => {
+      const detail = details[index] || {}
+
+      return {
+        title: item.title,
+        subTitle: detail.episodeName || item.seriesName,
+        icon: parseIcon(item),
         image: parseImage(item),
-        icon: parseImage(item),
-        category: parseCategory(item),
+        description: detail.longDescription || detail.shortDescription,
+        category: detail.genres,
+        actors: detail.actors,
+        directors: detail.directors,
+        producers: detail.producers,
+        season: parseSeason(detail),
+        episode: parseEpisode(detail),
+        date: parseYear(detail),
+        country: detail.countryOfOrigin,
+        rating: parseRating(detail, item),
+        language: parseLanguages(detail, item),
+        subtitles: parseSubtitles(detail, item),
+        new: Boolean(detail.premiere || item.premiere),
         start: parseStart(item),
-        stop: parseStop(item),
-        sub_title: item.subName,
-        season: item.seasonNum,
-        episode: item.subNum,
-        directors: parseDirectors(item),
-        producers: parseProducers(item),
-        adapters: parseAdapters(item),
-        country: item.country?.toUpperCase(),
-        date: item.producedate,
-        urls: parseUrls(item)
-      })
+        stop: parseStop(item)
+      }
     })
-    return programs
   },
   async channels() {
-    const url = 'https://api.prod.sngtv.magentatv.de/EPG/JSON/AllChannel'
-    const body = {
-      channelNamespace: 2,
-      filterlist: [
-        {
-          key: 'IsHide',
-          value: '-1'
-        }
-      ],
-      metaDataVer: 'Channel/1.1',
-      properties: [
-        {
-          include: '/channellist/logicalChannel/contentId,/channellist/logicalChannel/name',
-          name: 'logicalChannel'
-        }
-      ],
-      returnSatChannel: 0
-    }
-    const params = {
-      headers: await setHeaders()
-    }
-
     const data = await axios
-      .post(url, body, params)
+      .get(`${API_PROD_ENDPOINT}/channels?cityId=28001&language=en&productClass=Orion-DASH`)
       .then(r => r.data)
       .catch(console.log)
 
-    return data.channellist.map(item => {
+    return data.map(item => {
       return {
-        lang: 'de',
-        site_id: item.contentId,
+        lang: 'nl',
+        site_id: item.id,
         name: item.name
       }
     })
   }
 }
 
-function parseCategory(item) {
-  return item.genres
-    ? item.genres
-        .replace('und', ',')
-        .split(',')
-        .map(i => i.trim())
-    : []
+async function loadItems({ content, channel, date }) {
+  const urls = [0, 6, 12, 18].map(segment => module.exports.url({ date, channel, segment }))
+
+  // the first segment has already been downloaded by the grabber itself
+  cacheSegment(urls[0], content)
+
+  const missing = urls.filter(url => segments[url] === undefined)
+  if (missing.length) {
+    await doFetch(missing, (url, res) => cacheSegment(url, res))
+  }
+
+  const items = urls.flatMap(url => findEvents(segments[url], channel)).filter(isBroadcast)
+
+  // an event that spans a boundary is listed twice: by both segments, or by both days
+  return uniqueItems(items, channel, date)
 }
 
-function parseDirectors(item) {
-  if (!item.cast || !item.cast.director) return []
-  return item.cast.director
-    .replace('und', ',')
-    .split(',')
-    .map(i => i.trim())
+// `res` is left out when a request fails, but only when sfetch is checking results, which is a
+// setting shared with the other sites using it, so every program is built from its event first
+async function loadProgramDetails(items, channel) {
+  const details = []
+  const queues = items
+    .map((item, index) => ({ item, index }))
+    .filter(({ item }) => item.id)
+    .map(({ item, index }) => ({
+      url: `${API_PROD_ENDPOINT}/replayEvent/${item.id}?returnLinearContent=true&language=${channel.lang}`,
+      index
+    }))
+
+  if (queues.length) {
+    await doFetch(queues, (queue, res) => {
+      if (res) details[queue.index] = res
+    })
+  }
+
+  return details
 }
 
-function parseProducers(item) {
-  if (!item.cast || !item.cast.producer) return []
-  return item.cast.producer
-    .replace('und', ',')
-    .split(',')
-    .map(i => i.trim())
+function cacheSegment(url, content) {
+  if (segments[url] !== undefined) return
+  const entries = parseEntries(content)
+  // a failed download must not be cached, the next channel gets to retry it
+  if (entries.length) segments[url] = entries
 }
 
-function parseAdapters(item) {
-  if (!item.cast || !item.cast.adaptor) return []
-  return item.cast.adaptor
-    .replace('und', ',')
-    .split(',')
-    .map(i => i.trim())
-}
+// the grabber hands over the raw response, while axios has already parsed the ones fetched here
+function parseEntries(content) {
+  if (!content) return []
+  try {
+    const data = Array.isArray(content.entries) ? content : JSON.parse(content)
 
-function parseUrls(item) {
-  // currently only a imdb id is returned by the api, thus we can construct the url here
-  if (!item.externalIds) return []
-  return JSON.parse(item.externalIds)
-    .filter(externalId => externalId.type === 'imdb' && externalId.id)
-    .map(externalId => ({ system: 'imdb', value: `https://www.imdb.com/title/${externalId.id}` }))
-}
+    return Array.isArray(data.entries) ? data.entries : []
+  } catch (err) {
+    console.error(`Unable to parse guide: ${err.message}!`)
 
-function parseImage(item) {
-  if (!Array.isArray(item.pictures) || !item.pictures.length) return null
-
-  return item.pictures[0].href
+    return []
+  }
 }
 
 function parseStart(item) {
-  return dayjs.utc(item.starttime, 'YYYY-MM-DD HH:mm:ss')
+  return dayjs.unix(item.startTime)
 }
 
 function parseStop(item) {
-  return dayjs.utc(item.endtime, 'YYYY-MM-DD HH:mm:ss')
+  return dayjs.unix(item.endTime)
 }
 
-function parseItems(content) {
-  const data = JSON.parse(content)
-  if (!data || !Array.isArray(data.playbilllist)) return []
-
-  return data.playbilllist
+// telenet fills the hours a channel is off air with "Geen uitzending", often several in a row.
+// Nothing is behind them, so they are dropped and the guide simply has a hole there.
+function isBroadcast(item) {
+  return !/^geen uitzending\b/i.test(item.title || '')
 }
 
-async function fetchCookieAndToken() {
-  // Only fetch the cookies and csrfToken if they are not already set
-  if (X_CSRFTOKEN && Cookie) {
-    return
+function findEvents(entries, channel) {
+  if (!Array.isArray(entries)) return []
+  const channelData = entries.find(e => e.channelId === channel.site_id)
+  if (!channelData) return []
+
+  return Array.isArray(channelData.events) ? channelData.events : []
+}
+
+// Both guards are needed: the local set drops an event listed by two segments of this day, while
+// the claim drops one the previous day already emitted. Re-parsing a day it claimed itself stays
+// idempotent, so parsing the same day twice keeps returning the same programs.
+function uniqueItems(items, channel, date) {
+  const day = date.format('YYYYMMDD')
+  const claimedByChannel = claimed[channel.site_id] || (claimed[channel.site_id] = new Map())
+  const seen = new Set()
+
+  return items.filter(item => {
+    if (seen.has(item.id)) return false
+
+    const owner = claimedByChannel.get(item.id)
+    if (owner !== undefined && owner !== day) return false
+
+    seen.add(item.id)
+    claimedByChannel.set(item.id, day)
+
+    return true
+  })
+}
+
+function parseSeason(detail) {
+  if (!detail.seasonNumber) return null
+  if (String(detail.seasonNumber).length > 2) return null
+  return detail.seasonNumber
+}
+
+function parseEpisode(detail) {
+  if (!detail.episodeNumber) return null
+  if (String(detail.episodeNumber).length > 3) return null
+  return detail.episodeNumber
+}
+
+function parseYear(detail) {
+  if (!detail.productionDate) return null
+  if (!/^\d{4}$/.test(String(detail.productionDate))) return null
+  return detail.productionDate
+}
+
+// the minimum age follows the Kijkwijzer (NICAM) classification
+function parseRating(detail, item) {
+  const minimumAge = detail.minimumAge != null ? detail.minimumAge : item.minimumAge
+  if (minimumAge == null || minimumAge === '') {
+    if (detail.isAdult || item.isAdult) return { system: 'Kijkwijzer', value: '18' }
+    return null
   }
-
-  try {
-    const response = await axios.request({
-      url: 'https://api.prod.sngtv.magentatv.de/EPG/JSON/Authenticate',
-      params: {
-        SID: 'firstup',
-        T: 'Windows_chrome_118'
-      },
-      method: 'POST',
-      data: '{"terminalid":"00:00:00:00:00:00","mac":"00:00:00:00:00:00","terminaltype":"WEBTV","utcEnable":1,"timezone":"Etc/GMT0","userType":3,"terminalvendor":"Unknown"}'
-    })
-
-    // Extract the cookies specified in cookiesToExtract
-    const setCookieHeader = response.headers['set-cookie'] || []
-    const extractedCookies = []
-    cookiesToExtract.forEach(cookieName => {
-      const regex = new RegExp(`${cookieName}=(.+?)(;|$)`)
-      const match = setCookieHeader.find(header => regex.test(header))
-
-      if (match) {
-        const cookieString = regex.exec(match)[0]
-        extractedCookies.push(cookieString)
-      }
-    })
-
-    // check if we recieved a csrfToken only then store the values
-    if (!response.data.csrfToken) {
-      console.log('csrfToken not found in the response.')
-      return
-    }
-
-    X_CSRFTOKEN = response.data.csrfToken
-    Cookie = extractedCookies.join(' ')
-  } catch (error) {
-    console.error(error)
-  }
+  return { system: 'Kijkwijzer', value: String(minimumAge) }
 }
 
-async function setHeaders() {
-  await fetchCookieAndToken()
+function parseLanguages(detail, item) {
+  return parseLangCodes(detail.audioLanguages || item.audioLanguages)
+}
 
-  return { X_CSRFTOKEN, Cookie }
+function parseSubtitles(detail, item) {
+  const captions = parseLangCodes(detail.captionLanguages || item.captionLanguages)
+  const signed = parseLangCodes(detail.signLanguages || item.signLanguages)
+
+  return [
+    ...captions.map(language => ({ language })),
+    ...signed.map(language => ({ type: 'deaf-signed', language }))
+  ]
+}
+
+// the same language can be listed more than once, once per purpose (e.g. audio description)
+function parseLangCodes(languages) {
+  if (!Array.isArray(languages)) return []
+  return [...new Set(languages.map(language => language.lang).filter(Boolean))]
+}
+
+// Three assets hang off one event id. Only the poster is always there: over a day of the guide,
+// episodeStill answered for 91% of programmes and titleTreatment for 66%, and nothing in the event
+// says which, so all three are emitted and a reader has to expect a 404.
+//
+// Poster first because the DTD asks for the most authoritative image first -- though Telenet's own
+// player prefers the still, its bundle carrying the literal list ['episodeStill','posterTile'].
+const IMAGE_INTENTS = [
+  // Key art cropped to 2:3, always from the season or the movie, never per episode.
+  { intent: 'posterTile', type: 'poster', orient: 'P' },
+  // 16:9; a real production still for two thirds, season or show artwork for the rest. The app
+  // picks the landscape image on `type` alone, so dropping this one hides it there silently.
+  { intent: 'episodeStill', type: 'still', orient: 'L' },
+  // A transparent wordmark, which is none of the DTD's five types, so `system` is all it has.
+  { intent: 'titleTreatment', orient: 'L' },
+]
+
+function parseIcon(item) {
+  return imageUrl(item, 'posterTile')
+}
+
+function imageUrl(item, intent) {
+  return `${API_IMAGE_ENDPOINT}/intent/${item.id}/${intent}`
+}
+
+// <icon> repeats the poster because the two elements are read by different clients: <icon> has only
+// a src, while <image> is the one that can say what the picture is.
+function parseImage(item) {
+  return IMAGE_INTENTS.map(({ intent, type, orient }) => ({
+    ...(type ? { type } : {}),
+    orient,
+    system: intent,
+    value: imageUrl(item, intent),
+  }))
 }
