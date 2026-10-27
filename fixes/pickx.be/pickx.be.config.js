@@ -1,133 +1,150 @@
-//https://github.com/iptv-org/epg/blob/e4f92bb2a2768dcba3dbbd52b19d78d96bebc31e/sites/pickx.be/pickx.be.config.js
-
 const axios = require('axios')
 const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone')
 
-let apiVersion
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const API_ENDPOINT = 'https://api.prod-ntvbe.tvapi-web.pickx.be'
+const API_IMAGE_ENDPOINT =
+  'https://experience-cache.cdi.streaming.proximustv.be/posterserver/poster/EPG'
+
+const TIMEZONE = 'Europe/Brussels'
+
+// every tray of the AVS backend is addressed through
+// /{tenant}/{version}/{cluster}/{locale}/{platform}/{property}, where the cluster is the access
+// level ("A" is anonymous, which is enough for the public guide) and the platform has to be WEB
+const BASE_PATH = '/AGL/1.5/A/{locale}/WEB/PXS'
+
+// the locale only selects the language of the labels the API itself emits, never the language of
+// the guide, so a channel keeps its broadcast language whichever locale is requested
+const LOCALES = { en: 'ENG', fr: 'FRA', nl: 'NLD', de: 'DEU' }
+
+const LANGUAGES = {
+  ara: 'ar',
+  deu: 'de',
+  eng: 'en',
+  fra: 'fr',
+  ita: 'it',
+  nld: 'nl',
+  spa: 'es'
+}
+
+// the channel tray refuses any page wider than this
+const CHANNELS_PER_PAGE = 100
 
 module.exports = {
   site: 'pickx.be',
   days: 2,
-  async url({ channel, date }) {
-    if (!apiVersion) {
-      await fetchApiVersion()
-    }
-
-    return `https://px-epg.azureedge.net/airings/${apiVersion}/${date.format(
-      'YYYY-MM-DD'
-    )}/channel/${channel.site_id}?timezone=Europe%2FBrussels`
-  },
   request: {
     headers: {
-      Origin: 'https://www.pickx.be',
-      Referer: 'https://www.pickx.be/'
+      Origin: 'https://tv.pickx.be',
+      Referer: 'https://tv.pickx.be/'
     }
   },
-  parser({ channel, content }) {
+  url({ channel, date }) {
+    // the guide is cut into Brussels days, while the grabber hands us a UTC moment. Both edges
+    // are resolved from their own calendar date, because adding a day to the start would add a
+    // flat 24 hours and so cut the 25 hour day short, or overrun the 23 hour one, when the
+    // Brussels clock shifts
+    const start = brusselsMidnight(date)
+    const stop = brusselsMidnight(date.add(1, 'd'))
+
+    // from/to paginates the channels of the tray, not their programs, so asking for a single
+    // channel still returns its whole day
+    return `${API_ENDPOINT}${basePath(channel.lang)}/TRAY/EPG?from=1&to=1&filter_channelIds=${
+      channel.site_id
+    }&filter_startTime=${start.valueOf()}&filter_endTime=${stop.valueOf()}`
+  },
+  parser({ content }) {
     const programs = []
-    if (content) {
-      const items = JSON.parse(content)
-      items.forEach(item => {
-        programs.push({
-          title: item.program.title,
-          sub_title: item.program.episodeTitle,
-          description: item.program.description,
-          category: item.program.translatedCategory?.[channel.lang]
-            ? item.program.translatedCategory[channel.lang]
-            : item.program.category.split('.')[1],
-          image: item.program.posterFileName
-            ? `https://experience-cache.cdi.streaming.proximustv.be/posterserver/poster/EPG/${item.program.posterFileName}`
-            : null,
-          season: item.program.seasonNumber,
-          episode: item.program.episodeNumber,
-          actors: item.program.actors,
-          director: item.program.director ? [item.program.director] : null,
-          start: dayjs(item.programScheduleStart),
-          stop: dayjs(item.programScheduleEnd)
-        })
+    parseItems(content).forEach(item => {
+      const data = item.metadata
+      if (!data) return
+
+      programs.push({
+        title: data.title,
+        sub_title: data.episodeTitle,
+        description: data.longDescription || data.shortDescription,
+        category: data.genres,
+        image: parseImage(data),
+        season: data.season,
+        episode: data.episodeNumber,
+        actors: data.actors,
+        director: data.directors,
+        date: data.year,
+        country: data.country,
+        start: dayjs(data.airingStartTime),
+        stop: dayjs(data.airingEndTime)
       })
-    }
+    })
 
     return programs
   },
   async channels() {
-    let channels = []
+    const channels = []
 
-    const query = {
-      operationName: 'getChannels',
-      variables: {
-        language: 'fr',
-        queryParams: {},
-        id: '0',
-        params: {
-          shouldReadFromCache: true
-        }
-      },
-      query: `query getChannels($language: String!, $queryParams: ChannelQueryParams, $id: String, $params: ChannelParams) {
-        channels(language: $language, queryParams: $queryParams, id: $id, params: $params) {
-          id
-          name
-          language
-          radio
-        }
-      }`
-    }
+    for (let from = 1; ; from += CHANNELS_PER_PAGE) {
+      const data = await fetchChannels(from)
+      if (!data) break
 
-    const data = await axios
-      .post('https://api.proximusmwc.be/tiams/v3/graphql', query)
-      .then(r => r.data)
-      .catch(console.error)
+      const items = data.containers || []
+      items.forEach(item => {
+        const metadata = item.metadata
+        if (!metadata) return
 
-    data.data.channels.forEach(channel => {
-      let lang = channel.language || 'fr'
-      if (channel.language === 'ger') lang = 'de'
-
-      channels.push({
-        lang,
-        site_id: channel.id,
-        name: channel.name
+        channels.push({
+          lang: LANGUAGES[metadata.channelLanguage] || 'fr',
+          site_id: String(metadata.channelId),
+          name: metadata.channelName
+        })
       })
-    })
+
+      if (!items.length || channels.length >= data.total) break
+    }
 
     return channels
   }
 }
 
-async function fetchApiVersion() {
-  const hashUrl = 'https://www.pickx.be/nl/televisie/tv-gids'
-  const hashData = await axios
-    .get(hashUrl)
-    .then(r => {
-      const re = /"hashes":\["(.*)"\]/
-      const match = r.data.match(re)
-      if (match && match[1]) {
-        return match[1]
-      } else {
-        throw new Error('React app version hash not found')
+function basePath(lang) {
+  return BASE_PATH.replace('{locale}', LOCALES[lang] || LOCALES.nl)
+}
+
+function brusselsMidnight(date) {
+  return dayjs.tz(date.format('YYYY-MM-DD'), TIMEZONE).startOf('d')
+}
+
+function fetchChannels(from) {
+  return axios
+    .get(`${API_ENDPOINT}${basePath('nl')}/TRAY/LIVECHANNELS`, {
+      params: { from, to: from + CHANNELS_PER_PAGE - 1 },
+      headers: {
+        Origin: 'https://tv.pickx.be',
+        Referer: 'https://tv.pickx.be/'
       }
     })
+    .then(r => r.data.resultObj)
     .catch(console.error)
+}
 
-  const versionUrl = `https://www.pickx.be/api/s-${hashData}`
-  const response = await axios.get(versionUrl, {
-    headers: {
-      Origin: 'https://www.pickx.be',
-      Referer: 'https://www.pickx.be/'
-    }
-  })
+function parseImage(data) {
+  const filename = data.pictureUrl || data.extendedMetadata?.images?.landscapePoster
 
-  return new Promise((resolve, reject) => {
-    try {
-      if (response.status === 200) {
-        apiVersion = response.data.version
-        resolve()
-      } else {
-        console.error(`Failed to fetch API version. Status: ${response.status}`)
-        reject(`Failed to fetch API version. Status: ${response.status}`)
-      }
-    } catch (error) {
-      console.error('Error during fetchApiVersion:', error)
-      reject(error)
-    }
-  })
+  return filename ? `${API_IMAGE_ENDPOINT}/${filename}` : null
+}
+
+function parseItems(content) {
+  if (!content) return []
+
+  try {
+    const data = JSON.parse(content)
+    // the tray nests the programs of each requested channel under their own container
+    const channel = data?.resultObj?.containers?.[0]
+
+    return channel?.containers || []
+  } catch {
+    return []
+  }
 }
