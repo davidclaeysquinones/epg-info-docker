@@ -290,3 +290,6 @@ Sometimes a new version of this image will be bound to the same source commit. T
 - 1.0.94
   [10-26-2026](https://github.com/iptv-org/epg/commit/2c3e24fdab86140181878af00e01e9b440962d9b)
    <br> Add fix for Pickx.be provder
+- 1.0.95
+  [10-26-2026](https://github.com/iptv-org/epg/commit/2c3e24fdab86140181878af00e01e9b440962d9b)
+   <br> Solves issue in Telenet.TV custom fix
