@@ -46,11 +46,11 @@ This the list of the provided custom fixes :
 
 | Provider           | Author(s)                                                        | Status                                                                                                                                                         |
 |--------------------|------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| movistarplus.es    | [davidclaeysquinones](https://github.com/davidclaeysquinones)    | [PR](https://github.com/iptv-org/epg/pull/2440) pending approval                                                                                               |
-| orangetv.orange.es | [fraudiay79](https://github.com/fraudiay79) and [davidclaeysquinones](https://github.com/davidclaeysquinones)   | [PR](https://github.com/iptv-org/epg/pull/2485) merged since commit [8a8262e](https://github.com/iptv-org/epg/commit/8a8262eacb46b2d35df7eb11f46de22263eab053)                                             |
-| pickx.be           | [davidclaeysquinones](https://github.com/davidclaeysquinones) and [BellezaEmporium](https://github.com/BellezaEmporium)   | [PR](https://github.com/iptv-org/epg/pull/2525) merged since commit [fd91a9c](https://github.com/iptv-org/epg/commit/fd91a9c532b476f6e192a564371d30e766b762ab)                                    |
-| telenet.tv         | [davidclaeysquinones](https://github.com/davidclaeysquinones)    | [PR](https://github.com/iptv-org/epg/pull/2429) merged since commit [fd382db](https://github.com/iptv-org/epg/commit/fd382db08da7a96150928b8dcfef115e29e661d3) |
-| web.magentatv.de   | [klausellus-wallace](https://github.com/klausellus-wallace)      | [PR](https://github.com/iptv-org/epg/pull/2458) merged since commit [61afe09](https://github.com/iptv-org/epg/commit/61afe090b6e7892cc5426457d960e9452222f885)                                                                                               |
+| movistarplus.es    | | |
+| orangetv.orange.es | | |
+| pickx.be           | [davidclaeysquinones](https://github.com/davidclaeysquinones) | In testing |
+| telenet.tv         | | |
+| web.magentatv.de   | | |
 
 If for some reason you want to include your own provider fixes this is possible by creation a mapping in the `/fixes` folder.<br>
 The expected structure is */fixes/`provider_name`/`provider_name`.config.js*.<br>
@@ -287,3 +287,6 @@ Sometimes a new version of this image will be bound to the same source commit. T
   [10-23-2026](https://github.com/iptv-org/epg/commit/4abfae092f79fd3808ccadab65dc1873bcf6d259)
 - 1.0.93
   [10-25-2026](https://github.com/iptv-org/epg/commit/916c225d0a5e44534f09853674769c57005e61e5)
+- 1.0.94
+  [10-26-2026](https://github.com/iptv-org/epg/commit/2c3e24fdab86140181878af00e01e9b440962d9b)
+   <br> Add fix for Pickx.be provder
