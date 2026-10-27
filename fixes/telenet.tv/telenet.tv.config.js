@@ -1,135 +1,215 @@
-//https://github.com/iptv-org/epg/blob/e4f92bb2a2768dcba3dbbd52b19d78d96bebc31e/sites/telenet.tv/telenet.tv.config.js
+//https://github.com/iptv-org/epg/blob/master/sites/web.magentatv.de/web.magentatv.de.config.js
 
 const axios = require('axios')
 const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+const customParseFormat = require('dayjs/plugin/customParseFormat')
 
-const API_STATIC_ENDPOINT = 'https://static.spark.telenet.tv/eng/web/epg-service-lite/be'
-const API_PROD_ENDPOINT = 'https://spark-prod-be.gnp.cloud.telenet.tv/eng/web/linear-service/v2'
-const API_IMAGE_ENDPOINT = 'https://staticqbr-prod-be.gnp.cloud.telenet.tv/image-service'
+let X_CSRFTOKEN
+let Cookie
+const cookiesToExtract = ['JSESSIONID', 'CSESSIONID', 'CSRFSESSION']
+
+dayjs.extend(utc)
+dayjs.extend(customParseFormat)
 
 module.exports = {
-  site: 'telenet.tv',
+  site: 'web.magentatv.de',
   days: 2,
+  url: 'https://api.prod.sngtv.magentatv.de/EPG/JSON/PlayBillList',
   request: {
-    cache: {
-      ttl: 60 * 60 * 1000 // 1 hour
-    }
-  },
-  url: function ({ date, channel }) {
-    return `${API_STATIC_ENDPOINT}/${channel.lang}/events/segments/${date.format('YYYYMMDD')}000000`
-  },
-  async parser({ content, channel, date }) {
-    let programs = []
-    let items = parseItems(content, channel)
-    if (!items.length) return programs
-    const promises = [
-      axios.get(
-        `${API_STATIC_ENDPOINT}/${channel.lang}/events/segments/${date.format('YYYYMMDD')}060000`,
-        {
-          responseType: 'arraybuffer'
-        }
-      ),
-      axios.get(
-        `${API_STATIC_ENDPOINT}/${channel.lang}/events/segments/${date.format('YYYYMMDD')}120000`,
-        {
-          responseType: 'arraybuffer'
-        }
-      ),
-      axios.get(
-        `${API_STATIC_ENDPOINT}/${channel.lang}/events/segments/${date.format('YYYYMMDD')}180000`,
-        {
-          responseType: 'arraybuffer'
-        }
-      )
-    ]
-
-    await Promise.allSettled(promises)
-      .then(results => {
-        results.forEach(r => {
-          if (r.status === 'fulfilled') {
-            const parsed = parseItems(r.value.data, channel)
-
-            items = items.concat(parsed)
+    method: 'POST',
+    async headers() {
+      return await setHeaders()
+    },
+    data({ channel, date }) {
+      return {
+        count: -1,
+        isFillProgram: 1,
+        offset: 0,
+        properties: [
+          {
+            include:
+              'endtime,genres,id,name,starttime,channelid,pictures,introduce,subName,seasonNum,subNum,cast,country,producedate,externalIds',
+            name: 'playbill'
           }
-        })
-      })
-      .catch(console.error)
-
-    for (let item of items) {
-      const detail = await loadProgramDetails(item, channel)
-      programs.push({
-        title: item.title,
-        subTitle: detail.episodeName,
-        icon: parseIcon(item),
-        description: detail.longDescription,
-        category: detail.genres,
-        actors: detail.actors,
-        season: parseSeason(detail),
-        episode: parseEpisode(detail),
-        start: parseStart(item),
-        stop: parseStop(item)
-      })
+        ],
+        type: 2,
+        begintime: date.format('YYYYMMDD000000'),
+        channelid: channel.site_id,
+        endtime: date.add(1, 'd').format('YYYYMMDD000000')
+      }
     }
-
+  },
+  parser({ content }) {
+    const programs = []
+    const items = parseItems(content)
+    items.forEach(item => {
+      programs.push({
+        title: item.name,
+        description: item.introduce,
+        image: parseImage(item),
+        icon: parseImage(item),
+        category: parseCategory(item),
+        start: parseStart(item),
+        stop: parseStop(item),
+        sub_title: item.subName,
+        season: item.seasonNum,
+        episode: item.subNum,
+        directors: parseDirectors(item),
+        producers: parseProducers(item),
+        adapters: parseAdapters(item),
+        country: item.country?.toUpperCase(),
+        date: item.producedate,
+        urls: parseUrls(item)
+      })
+    })
     return programs
   },
   async channels() {
+    const url = 'https://api.prod.sngtv.magentatv.de/EPG/JSON/AllChannel'
+    const body = {
+      channelNamespace: 2,
+      filterlist: [
+        {
+          key: 'IsHide',
+          value: '-1'
+        }
+      ],
+      metaDataVer: 'Channel/1.1',
+      properties: [
+        {
+          include: '/channellist/logicalChannel/contentId,/channellist/logicalChannel/name',
+          name: 'logicalChannel'
+        }
+      ],
+      returnSatChannel: 0
+    }
+    const params = {
+      headers: await setHeaders()
+    }
+
     const data = await axios
-      .get(`${API_PROD_ENDPOINT}/channels?cityId=28001&language=en&productClass=Orion-DASH`)
+      .post(url, body, params)
       .then(r => r.data)
       .catch(console.log)
 
-    return data.map(item => {
+    return data.channellist.map(item => {
       return {
-        lang: 'nl',
-        site_id: item.id,
+        lang: 'de',
+        site_id: item.contentId,
         name: item.name
       }
     })
   }
 }
 
-async function loadProgramDetails(item, channel) {
-  if (!item.id) return {}
-  const url = `${API_PROD_ENDPOINT}/replayEvent/${item.id}?returnLinearContent=true&language=${channel.lang}`
-  const data = await axios
-    .get(url)
-    .then(r => r.data)
-    .catch(console.log)
+function parseCategory(item) {
+  return item.genres
+    ? item.genres
+        .replace('und', ',')
+        .split(',')
+        .map(i => i.trim())
+    : []
+}
 
-  return data || {}
+function parseDirectors(item) {
+  if (!item.cast || !item.cast.director) return []
+  return item.cast.director
+    .replace('und', ',')
+    .split(',')
+    .map(i => i.trim())
+}
+
+function parseProducers(item) {
+  if (!item.cast || !item.cast.producer) return []
+  return item.cast.producer
+    .replace('und', ',')
+    .split(',')
+    .map(i => i.trim())
+}
+
+function parseAdapters(item) {
+  if (!item.cast || !item.cast.adaptor) return []
+  return item.cast.adaptor
+    .replace('und', ',')
+    .split(',')
+    .map(i => i.trim())
+}
+
+function parseUrls(item) {
+  // currently only a imdb id is returned by the api, thus we can construct the url here
+  if (!item.externalIds) return []
+  return JSON.parse(item.externalIds)
+    .filter(externalId => externalId.type === 'imdb' && externalId.id)
+    .map(externalId => ({ system: 'imdb', value: `https://www.imdb.com/title/${externalId.id}` }))
+}
+
+function parseImage(item) {
+  if (!Array.isArray(item.pictures) || !item.pictures.length) return null
+
+  return item.pictures[0].href
 }
 
 function parseStart(item) {
-  return dayjs.unix(item.startTime)
+  return dayjs.utc(item.starttime, 'YYYY-MM-DD HH:mm:ss')
 }
 
 function parseStop(item) {
-  return dayjs.unix(item.endTime)
+  return dayjs.utc(item.endtime, 'YYYY-MM-DD HH:mm:ss')
 }
 
-function parseItems(content, channel) {
-  if (!content) return []
+function parseItems(content) {
   const data = JSON.parse(content)
-  if (!data || !Array.isArray(data.entries)) return []
-  const channelData = data.entries.find(e => e.channelId === channel.site_id)
-  if (!channelData) return []
+  if (!data || !Array.isArray(data.playbilllist)) return []
 
-  return Array.isArray(channelData.events) ? channelData.events : []
+  return data.playbilllist
 }
 
-function parseSeason(detail) {
-  if (!detail.seasonNumber) return null
-  if (String(detail.seasonNumber).length > 2) return null
-  return detail.seasonNumber
+async function fetchCookieAndToken() {
+  // Only fetch the cookies and csrfToken if they are not already set
+  if (X_CSRFTOKEN && Cookie) {
+    return
+  }
+
+  try {
+    const response = await axios.request({
+      url: 'https://api.prod.sngtv.magentatv.de/EPG/JSON/Authenticate',
+      params: {
+        SID: 'firstup',
+        T: 'Windows_chrome_118'
+      },
+      method: 'POST',
+      data: '{"terminalid":"00:00:00:00:00:00","mac":"00:00:00:00:00:00","terminaltype":"WEBTV","utcEnable":1,"timezone":"Etc/GMT0","userType":3,"terminalvendor":"Unknown"}'
+    })
+
+    // Extract the cookies specified in cookiesToExtract
+    const setCookieHeader = response.headers['set-cookie'] || []
+    const extractedCookies = []
+    cookiesToExtract.forEach(cookieName => {
+      const regex = new RegExp(`${cookieName}=(.+?)(;|$)`)
+      const match = setCookieHeader.find(header => regex.test(header))
+
+      if (match) {
+        const cookieString = regex.exec(match)[0]
+        extractedCookies.push(cookieString)
+      }
+    })
+
+    // check if we recieved a csrfToken only then store the values
+    if (!response.data.csrfToken) {
+      console.log('csrfToken not found in the response.')
+      return
+    }
+
+    X_CSRFTOKEN = response.data.csrfToken
+    Cookie = extractedCookies.join(' ')
+  } catch (error) {
+    console.error(error)
+  }
 }
 
-function parseEpisode(detail) {
-  if (!detail.episodeNumber) return null
-  if (String(detail.episodeNumber).length > 3) return null
-  return detail.episodeNumber
-}
+async function setHeaders() {
+  await fetchCookieAndToken()
 
-function parseIcon(item) {
-  return `${API_IMAGE_ENDPOINT}/intent/${item.id}/posterTile`
+  return { X_CSRFTOKEN, Cookie }
 }
