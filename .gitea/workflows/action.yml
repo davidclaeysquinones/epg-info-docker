@@ -11,7 +11,7 @@ jobs:
           working-directory: ${{ github.workspace }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup docker
         uses: https://git.claeyscloud.com/david/gitea-actions/setup-docker@main
       - name: Login to Gitea container registry

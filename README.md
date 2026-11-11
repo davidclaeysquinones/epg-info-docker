@@ -295,3 +295,5 @@ Sometimes a new version of this image will be bound to the same source commit. T
    <br> Solves issue in Telenet.TV custom fix
 - 1.0.96
   [10-29-2026](https://github.com/iptv-org/epg/commit/ae9cc64f9497c602ec2f6e17857ae38b3aa1ff05)
+- 1.0.97
+  [10-29-2026](https://github.com/iptv-org/epg/commit/55b0e5c5218c53899ca947eff356f2f101bfbc8f)
